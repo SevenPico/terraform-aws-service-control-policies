@@ -1,0 +1,64 @@
+# Requires parameter:
+#  - allowed_regions # Comma separated list of regions in which to allow operations
+#  - allowed_principals # Comma separated list of Principals in which to always allow operations
+
+# https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples.html#examples_general
+- sid: "RestrictToSpecifiedRegions"
+  effect: "Deny"
+  not_actions:
+    - "a4b:*"
+    - "acm:*"
+    - "aws-marketplace-management:*"
+    - "aws-marketplace:*"
+    - "aws-portal:*"
+    - "awsbillingconsole:*"
+    - "budgets:*"
+    - "ce:*"
+    - "chime:*"
+    - "cloudfront:*"
+    - "config:*"
+    - "cur:*"
+    - "directconnect:*"
+    - "ec2:DescribeRegions"
+    - "ec2:DescribeTransitGateways"
+    - "ec2:DescribeVpnGateways"
+    - "fms:*"
+    - "globalaccelerator:*"
+    - "health:*"
+    - "iam:*"
+    - "importexport:*"
+    - "kms:*"
+    - "mobileanalytics:*"
+    - "networkmanager:*"
+    - "organizations:*"
+    - "pricing:*"
+    - "route53:*"
+    - "route53domains:*"
+    - "s3:GetAccountPublic*"
+    - "s3:ListAllMyBuckets"
+    - "s3:PutAccountPublic*"
+    - "shield:*"
+    - "sts:*"
+    - "support:*"
+    - "trustedadvisor:*"
+    - "waf-regional:*"
+    - "waf:*"
+    - "wafv2:*"
+    - "wellarchitected:*"
+  condition:
+    - test: "StringNotEqualsIgnoreCase"
+      variable: "aws:RequestedRegion"
+      # List of allowed regions
+      values:
+      %{ for r in split(",", allowed_regions) }
+        - ${trimspace(r)}
+      %{ endfor }
+    - test: "StringNotLike"
+      variable: "aws:PrincipalArn"
+      # List of allowed principals
+      values:
+      %{ for r in split(",", allowed_principals) }
+      - ${trimspace(r)}
+      %{ endfor }
+  resources:
+    - "*"

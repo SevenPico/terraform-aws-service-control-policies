@@ -29,7 +29,7 @@ module "yaml_config" {
 
   parameters = var.parameters
 
-  context = module.this.context
+  context = module.context.self
 }
 
 data "aws_caller_identity" "this" {}
@@ -41,5 +41,5 @@ module "service_control_policies" {
   service_control_policy_description = var.service_control_policy_description
   target_id                          = data.aws_caller_identity.this.account_id
 
-  context = module.this.context
+  context = module.context.self
 }

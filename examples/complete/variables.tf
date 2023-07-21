@@ -20,10 +20,10 @@
 ##  This file contains code modified by SevenPico, Inc.
 ## ----------------------------------------------------------------------------
 
-variable "region" {
-  type        = string
-  description = "AWS region"
-}
+#variable "region" {
+#  type        = string
+#  description = "AWS region"
+#}
 
 variable "service_control_policy_description" {
   type        = string
